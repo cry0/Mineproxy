@@ -13,7 +13,7 @@ public:
 	virtual ~Packet() {}
 	virtual bool ReadPacket(SOCKET s) = 0;
 	virtual void WritePacket(SOCKET s) = 0;
-	virtual void Process() {};
+	virtual void Process(bool to_server = false) {};
 	virtual void Print(FILE *fp) = 0;
 };
 
@@ -58,6 +58,7 @@ public:
 #include "PacketEntityLook.h"
 #include "PacketEntityLookMove.h"
 #include "PacketEntityTeleport.h"
+#include "PacketEntityStatus.h"
 
 #include "PacketAttachEntity.h"
 
@@ -66,6 +67,17 @@ public:
 #include "PacketMultiBlockChange.h"
 #include "PacketBlockChange.h"
 #include "PacketComplexEntity.h"
+#include "PacketExplosion.h"
+
+#include "PacketOpenWindow.h"
+#include "PacketCloseWindow.h"
+#include "PacketWindowClick.h"
+#include "PacketSetSlot.h"
+#include "PacketWindowItems.h"
+#include "PacketProgressBar.h"
+#include "PacketTransaction.h"
+
+#include "PacketUpdateSign.h"
 
 #include "PacketKick.h"
 #endif

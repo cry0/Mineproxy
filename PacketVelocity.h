@@ -37,10 +37,6 @@ public:
 	{
 		fprintf(fp, "Velocity?( entityID = %d, velocityX = %d, velocityY = %d, velocityZ = %d)", entityID, (int)velocityX, (int)velocityY, (int)velocityZ);
 	}
-
-	void Process()
-	{
-	}
 };
 
 REGISTER_PACKET(Velocity);

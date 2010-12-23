@@ -31,10 +31,6 @@ public:
 	{
 		fprintf(fp, "AttachEntity?( entityID = %d, vehicleID = %d )", entityID, vehicleID);
 	}
-
-	void Process()
-	{
-	}
 };
 
 REGISTER_PACKET(AttachEntity);

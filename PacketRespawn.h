@@ -25,10 +25,6 @@ public:
 	{
 		fprintf(fp, "Respawn(  )");
 	}
-
-	void Process()
-	{
-	}
 };
 
 REGISTER_PACKET(Respawn);

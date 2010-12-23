@@ -34,10 +34,6 @@ public:
 	{
 		fprintf(fp, "UseEntity( user = %d, target = %d, punching? = %d )", user, target, (int)punching);
 	}
-
-	void Process()
-	{
-	}
 };
 
 REGISTER_PACKET(UseEntity);

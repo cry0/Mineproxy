@@ -29,7 +29,7 @@ public:
 		WriteByte(s,mode);
 	}
 
-	void Process()
+	void Process(bool to_server)
 	{
 		if(!dumpingWorld)
 			return;

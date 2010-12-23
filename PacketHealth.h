@@ -15,22 +15,18 @@ public:
 	}
 	bool ReadPacket(SOCKET s)
 	{
-		health = ReadByte(s);
+		health = ReadShort(s);
 		return true;
 	}
 
 	void WritePacket(SOCKET s)
 	{
-		WriteByte(s, health);
+		WriteShort(s, health);
 	}
 
 	void Print(FILE *fp)
 	{
 		fprintf(fp, "Health( Health = %d )", (int)health);
-	}
-
-	void Process()
-	{
 	}
 };
 

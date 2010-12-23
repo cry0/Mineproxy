@@ -84,7 +84,7 @@ public:
 		send(s,(char*)compressedData,compressedSize,0);
 	}
 
-	void Process()
+	void Process(bool to_server)
 	{
 		if(!dumpingWorld)
 			return;
@@ -97,7 +97,8 @@ public:
 		Chunk *chunk = g_level.chunks.getChunk(x/16,z/16);
 		if(chunk == NULL)
 		{
-			printf("Unable to find chunk %d,%d in hashmap\n",x,z);
+			printf("Unable to find chunk %d,%d in hashmap, inserting new chunk.\n",x,z);
+			return;
 		}
 
 		// not full chunk
@@ -110,6 +111,7 @@ public:
 		memcpy(chunk->metadata,metadata,arraysize/2);
 		memcpy(chunk->blocklight,blocklight,arraysize/2);
 		memcpy(chunk->skylight,skylight,arraysize/2);
+		chunk->Save();
 	}
 
 	void Print(FILE *fp)

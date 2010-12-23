@@ -1,5 +1,6 @@
 #include "protocol.h"
 #include <string.h>
+#include <stdio.h>
 #include <stdint.h>
 
 void RecvAll(SOCKET s, char *buf, size_t len, int opts)
@@ -81,7 +82,7 @@ void WriteDouble(SOCKET s, double val)
 
 char *ReadString(SOCKET s)
 {
-	int16_t stringlen;
+	uint16_t stringlen;
 	RecvAll(s, (char*)&stringlen, sizeof(stringlen), 0);
 	stringlen = ntohs(stringlen);
 	char *str = new char[stringlen+1];

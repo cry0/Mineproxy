@@ -31,9 +31,10 @@ public:
 		coordinateArray = new short[arraySize];
 		typeArray = new unsigned char[arraySize];
 		metaDataArray = new unsigned char[arraySize];
-		RecvAll(s,(char*)coordinateArray,sizeof(short)*arraySize,0);
-		RecvAll(s,(char*)typeArray,sizeof(char)*arraySize,0);
-		RecvAll(s,(char*)metaDataArray,sizeof(char)*arraySize,0);
+		int shortSize = 2*arraySize;
+		RecvAll(s,(char*)coordinateArray,shortSize,0);
+		RecvAll(s,(char*)typeArray,arraySize,0);
+		RecvAll(s,(char*)metaDataArray,arraySize,0);
 		return true;
 	}
 
@@ -42,9 +43,10 @@ public:
 		WriteInt(s,x);
 		WriteInt(s,z);
 		WriteShort(s,arraySize);
-		send(s,(char*)coordinateArray,sizeof(short)*arraySize,0);
-		send(s,(char*)typeArray,sizeof(char)*arraySize,0);
-		send(s,(char*)metaDataArray,sizeof(char)*arraySize,0);
+		int shortSize = 2*arraySize;
+		send(s,(char*)coordinateArray,shortSize,0);
+		send(s,(char*)typeArray,arraySize,0);
+		send(s,(char*)metaDataArray,arraySize,0);
 	}
 
 	void Print(FILE *fp)

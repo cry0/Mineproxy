@@ -28,7 +28,7 @@ public:
 		fprintf(fp, "TimeUpdate ( time = %lld )", time);
 	}
 
-	void Process()
+	void Process(bool to_server)
 	{
 		if(!dumpingWorld)
 			return;

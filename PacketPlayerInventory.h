@@ -7,8 +7,9 @@
 class Packet_PlayerInventory : public Packet
 {
 private:
-	int type;
-	short count;
+	int entityID;
+	short slot;
+	short itemID;
 
 	struct Item
 	{
@@ -20,7 +21,7 @@ private:
 	Item *items;
 
 public:
-	Packet_PlayerInventory() : type(0),count(0),items(NULL) {}
+	Packet_PlayerInventory() : entityID(0), slot(0), itemID(0), items(NULL) {}
 
 	~Packet_PlayerInventory()
 	{
@@ -29,8 +30,13 @@ public:
 
 	bool ReadPacket(SOCKET s)
 	{
-		type = ReadInt(s);
-		count = ReadShort(s);
+		entityID = ReadInt(s);
+		slot = ReadShort(s);
+		itemID = ReadShort(s);
+		return true;
+/*
+		if(count <= 0)
+			return true;
 
 		items = new Item[count];
 
@@ -45,13 +51,15 @@ public:
 			}
 		}
 		return true;
+*/
 	}
 
 	void WritePacket(SOCKET s)
 	{
-		WriteInt(s,type);
-		WriteShort(s,count);
-
+		WriteInt(s,entityID);
+		WriteShort(s,slot);
+		WriteShort(s,itemID);
+/*
 		for(int i=0;i<count;i++)
 		{
 			WriteShort(s,items[i].itemid);
@@ -61,13 +69,13 @@ public:
 				WriteShort(s,items[i].health);
 			}
 		}
-
+*/
 	}
 
 	void Print(FILE *fp)
 	{
-		fprintf(fp, "PlayerInventory( type = %d, count = %d )",
-			type, (int)count);
+		fprintf(fp, "PlayerInventory( entityID = %d, slot = %d, itemID = %d )",
+			entityID, slot, (int)itemID);
 	}
 };
 

@@ -45,7 +45,7 @@ public:
 		fprintf(fp, "Login( version = %d, name = %s, password = %s, mapSeed = %lld, dimension = %d )", version, name, password, mapSeed, (int)dimension);
 	}
 
-	void Process()
+	void Process(bool to_server)
 	{
 		if(!dumpingWorld)
 			return;

@@ -7,6 +7,7 @@
 #include <netdb.h>
 #include <sys/socket.h>
 #include <sys/ioctl.h>
+//#include <unistd.h>
 #include <errno.h>
 // Call me lazy
 #define INVALID_SOCKET -1
@@ -23,7 +24,7 @@ bool generatingLog = false;
 #ifndef WIN32
 /**
 * C++ version 0.4 char* style "itoa":
-* Written by Lukás Chmela
+* Written by Lukï¿½s Chmela
 * Released under GPLv3.
 */
 char* itoa(int value, char* result, int base) {
@@ -75,6 +76,9 @@ SOCKET Connect(const char *host, int port)
 	SOCKET server = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	hostent *hp;
 
+	//const uint32_t reuse_addr = 1;
+	//setsockopt(server, IPPROTO_TCP, TCP_NODELAY, &reuse_addr, sizeof(reuse_addr));
+
 	unsigned long addr=inet_addr(host);
 	if(addr==INADDR_NONE)
 	{
@@ -120,6 +124,10 @@ SOCKET WaitForClient(int port)
 		printf("Failed to create socket\n");
 		return 0;
 	}
+
+	const uint32_t reuse_addr = 1;
+	setsockopt(ourserver, SOL_SOCKET, SO_REUSEADDR, &reuse_addr, sizeof(reuse_addr));
+	//setsockopt(ourserver, IPPROTO_TCP, TCP_NODELAY, &reuse_addr, sizeof(reuse_addr));
 
 	sockaddr_in local;
 	local.sin_family = AF_INET;
@@ -274,6 +282,7 @@ int main(int argc, char *argv[])
 	packetFactory[0x20] = CreatePacket_EntityLook;
 	packetFactory[0x21] = CreatePacket_EntityLookMove;
 	packetFactory[0x22] = CreatePacket_EntityTeleport;
+	packetFactory[0x26] = CreatePacket_EntityStatus;
 
 	packetFactory[0x27] = CreatePacket_AttachEntity;
 	packetFactory[0x32] = CreatePacket_PreChunk;
@@ -281,6 +290,17 @@ int main(int argc, char *argv[])
 	packetFactory[0x34] = CreatePacket_MultiBlockChange;
 	packetFactory[0x35] = CreatePacket_BlockChange;
 	packetFactory[0x3B] = CreatePacket_ComplexEntity;
+	packetFactory[0x3C] = CreatePacket_Explosion;
+
+	packetFactory[0x64] = CreatePacket_OpenWindow;
+	packetFactory[0x65] = CreatePacket_CloseWindow;
+	packetFactory[0x66] = CreatePacket_WindowClick;
+	packetFactory[0x67] = CreatePacket_SetSlot;
+	packetFactory[0x68] = CreatePacket_WindowItems;
+	packetFactory[0x69] = CreatePacket_ProgressBar;
+	packetFactory[0x6A] = CreatePacket_Transaction;
+
+	packetFactory[0x82] = CreatePacket_UpdateSign;
 
 	packetFactory[0xFF] = CreatePacket_Kick;
 
@@ -337,6 +357,8 @@ int main(int argc, char *argv[])
 					break;
 				}
 
+				int curtimes = (int)time(0);
+				static int oldtime = (int)time(0);
 				unsigned char packetType;
 				if(FD_ISSET(client, &socks))
 				{
@@ -349,12 +371,11 @@ int main(int argc, char *argv[])
 						running = false;
 						break;
 					}
-
 					int curtime = (int)clock();
 					if(packetFactory[packetType] == NULL)
 					{
 						printf("%2.5f 0x%02X C->S: ",double(curtime-starttime)/CLOCKS_PER_SEC, packetType);
-						printf("Invalid Packet Type");
+						printf("Invalid Packet Type\n");
 						running = false;
 						break;
 					}
@@ -365,14 +386,109 @@ int main(int argc, char *argv[])
 					}
 					if(packet->ReadPacket(client))
 					{	
-						packet->Process();
+						packet->Process(true);
 						if(generatingLog)
 						{
 							packet->Print(fp);
 							fprintf(fp,"\n");
 						}
-						send(server,(char*)&packetType,1,0);
-						packet->WritePacket(server);
+						if(packetType == 0xE)
+						{
+							Packet_PlayerDig* digpacket = (Packet_PlayerDig*)packet;
+							if(digpacket->GetStatus() == 0)
+							{
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								digpacket->SetStatus(1);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								digpacket->SetStatus(3);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+							}
+							else if (digpacket->GetStatus() == 1)
+							{
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+							}
+							else if (digpacket->GetStatus() != 2)
+							{
+								send(server,(char*)&packetType,1,0);
+								packet->WritePacket(server);
+							}
+								
+						}
+						else
+						{
+							send(server,(char*)&packetType,1,0);
+							packet->WritePacket(server);
+						}
 					}
 					delete packet;
 				}
@@ -388,13 +504,11 @@ int main(int argc, char *argv[])
 						running = false;
 						break;
 					}
-
 					int curtime = (int)clock();
-
 					if(packetFactory[packetType] == NULL)
 					{
-						printf("%2.5f 0x%02X C->S: ",double(curtime-starttime)/CLOCKS_PER_SEC, packetType);
-						printf("Invalid Packet Type");
+						printf("%2.5f 0x%02X S->C: ",double(curtime-starttime)/CLOCKS_PER_SEC, packetType);
+						printf("Invalid Packet Type\n");
 						running = false;
 						break;
 					}
@@ -405,7 +519,7 @@ int main(int argc, char *argv[])
 					}
 					if(packet->ReadPacket(server))
 					{
-						packet->Process();
+						packet->Process(false);
 						if(generatingLog)
 						{
 							packet->Print(fp);
@@ -416,6 +530,14 @@ int main(int argc, char *argv[])
 					}
 					delete packet;
 				}
+				static const unsigned char keep_alive = 0;
+				if(oldtime<curtimes-2)
+				{
+					send(server,(char*)&keep_alive,1,0);
+					send(client,(char*)&keep_alive,1,0);
+					oldtime = curtimes;
+				}
+				//usleep(5000);
 			}
 		}
 		catch (const char *err)
@@ -425,7 +547,6 @@ int main(int argc, char *argv[])
 		if(dumpingWorld)
 		{
 			g_level.Save();
-			g_level.chunks.clear();
 		}
 		printf("Connection has been terminated (0x%08X)\n",WSAGetLastError());
 #ifdef WIN32
