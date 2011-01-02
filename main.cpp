@@ -21,6 +21,9 @@ char worldfolder[128] = "";
 bool dumpingWorld = false;
 bool generatingLog = false;
 
+bool g_autoMine = true;
+int g_mineSpeed = 25;
+
 #ifndef WIN32
 /**
 * C++ version 0.4 char* style "itoa":
@@ -61,7 +64,6 @@ CreateInstance_t packetFactory[256];
 
 #include "level.h"
 
-
 void SetNonBlocking(SOCKET s)
 {
 	u_long iMode = 1;
@@ -69,15 +71,10 @@ void SetNonBlocking(SOCKET s)
 
 }
 
-
-
 SOCKET Connect(const char *host, int port)
 {
 	SOCKET server = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	hostent *hp;
-
-	//const uint32_t reuse_addr = 1;
-	//setsockopt(server, IPPROTO_TCP, TCP_NODELAY, &reuse_addr, sizeof(reuse_addr));
 
 	unsigned long addr=inet_addr(host);
 	if(addr==INADDR_NONE)
@@ -127,7 +124,6 @@ SOCKET WaitForClient(int port)
 
 	const uint32_t reuse_addr = 1;
 	setsockopt(ourserver, SOL_SOCKET, SO_REUSEADDR, &reuse_addr, sizeof(reuse_addr));
-	//setsockopt(ourserver, IPPROTO_TCP, TCP_NODELAY, &reuse_addr, sizeof(reuse_addr));
 
 	sockaddr_in local;
 	local.sin_family = AF_INET;
@@ -185,7 +181,8 @@ void usage()
 int main(int argc, char *argv[])
 {
 	printf("Minecraft Alpha Proxy by ReDucTor (James Mitchell)\n");
-	printf("Version: 1.5\n");
+	printf("Version: 1.6\n");
+	printf("Updated to Minecraft Beta by Zwagoth\n");
 
 	int clientport = 1337;
 	char hostname[128] = "localhost";
@@ -229,12 +226,12 @@ int main(int argc, char *argv[])
 		--argc;
 	}
 
-	if(worldfolder[0] == 0 && logfilename[0] == 0)
-	{
-		printf("You must specify to either log and/or generate a save\n");
-		usage();
-		return 0;
-	}
+	//if(worldfolder[0] == 0 && logfilename[0] == 0)
+	//{
+	//	printf("You must specify to either log and/or generate a save\n");
+	//	usage();
+	//	return 0;
+	//}
 
 
 	FILE *fp = stdout;
@@ -392,97 +389,36 @@ int main(int argc, char *argv[])
 							packet->Print(fp);
 							fprintf(fp,"\n");
 						}
-						if(packetType == 0xE)
+						if(packetType == 0xE && g_autoMine == true)
 						{
 							Packet_PlayerDig* digpacket = (Packet_PlayerDig*)packet;
-							if(digpacket->GetStatus() == 0)
+							switch(digpacket->GetStatus())
 							{
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								digpacket->SetStatus(1);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								digpacket->SetStatus(3);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
+								case 0:
+									send(server,(char*)&packetType,1,0);
+									packet->WritePacket(server);
+									digpacket->SetStatus(1);
+									for(int i=0;i<g_mineSpeed;++i)
+									{
+										send(server,(char*)&packetType,1,0);
+										packet->WritePacket(server);
+									}
+									digpacket->SetStatus(3);
+									send(server,(char*)&packetType,1,0);
+									packet->WritePacket(server);
+									break;
+								case 1:
+									for(int i=0;i<g_mineSpeed;++i)
+									{
+										send(server,(char*)&packetType,1,0);
+										packet->WritePacket(server);
+									}
+									break;
+								default:
+									send(server,(char*)&packetType,1,0);
+									packet->WritePacket(server);
+									break;
 							}
-							else if (digpacket->GetStatus() == 1)
-							{
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-							}
-							else if (digpacket->GetStatus() != 2)
-							{
-								send(server,(char*)&packetType,1,0);
-								packet->WritePacket(server);
-							}
-								
 						}
 						else
 						{
@@ -513,7 +449,7 @@ int main(int argc, char *argv[])
 						break;
 					}
 					Packet *packet = packetFactory[packetType]();
-					if(generatingLog)
+					if(generatingLog && packetType != 0x20 && packetType != 0x1F && packetType != 0x1E && packetType != 0x21)
 					{
 						fprintf(fp,"%2.5f 0x%02X S->C: ",double(curtime-starttime)/CLOCKS_PER_SEC, packetType );
 					}
@@ -523,6 +459,7 @@ int main(int argc, char *argv[])
 						if(generatingLog)
 						{
 							packet->Print(fp);
+							if(packetType != 0x20 && packetType != 0x1F && packetType != 0x1E && packetType != 0x21)
 							fprintf(fp,"\n");
 						}
 						send(client,(char*)&packetType,1,0);

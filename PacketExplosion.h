@@ -16,6 +16,10 @@ class Packet_Explosion : public Packet
 	public:
 		Packet_Explosion() : x(0),y(0),z(0),radius(0),recordCount(0),records(0) {}
 		
+		~Packet_Explosion()
+		{
+			delete[] records;
+		}
 		
 		bool ReadPacket(SOCKET s)
 		{

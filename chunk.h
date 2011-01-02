@@ -100,8 +100,8 @@ struct Chunk
 		_mkdir(path);
 		sprintf(strchr(path,0),"/%s",zMod64);
 		_mkdir(path);
-		sprintf(strchr(path,0),"/c.%s%s.%s%s.dat",x<0?"-":"",xBase36,z<0?"-":"",zBase36);
-		//sprintf(strchr(path,0),"/c.%s.%s.dat", xBase36, zBase36);
+		//sprintf(strchr(path,0),"/c.%s%s.%s%s.dat",x<0?"-":"",xBase36,z<0?"-":"",zBase36);
+		sprintf(strchr(path,0),"/c.%s.%s.dat", xBase36, zBase36);
 
 		std::stringstream ss(std::stringstream::in | std::stringstream::out);
 		unsigned int c = 0x0A00000A;

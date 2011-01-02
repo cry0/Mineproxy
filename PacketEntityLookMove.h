@@ -40,8 +40,8 @@ public:
 
 	void Print(FILE *fp)
 	{
-		fprintf(fp, "EntityLookMove ( entityID = %d, x = %d, y = %d, z = %d, rotation = %d, pitch = %d )",
-			entityID, (int)x, (int)y, (int)z, (int)rotation, (int)pitch);
+		//fprintf(fp, "EntityLookMove ( entityID = %d, x = %d, y = %d, z = %d, rotation = %d, pitch = %d )",
+		//	entityID, (int)x, (int)y, (int)z, (int)rotation, (int)pitch);
 	}
 };
 

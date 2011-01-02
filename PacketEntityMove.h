@@ -34,8 +34,8 @@ public:
 
 	void Print(FILE *fp)
 	{
-		fprintf(fp, "EntityMove( entityID = %d, x = %d, y = %d, z = %d )",
-			entityID, (int)x, (int)y, (int)z);
+		//fprintf(fp, "EntityMove( entityID = %d, x = %d, y = %d, z = %d )",
+		//	entityID, (int)x, (int)y, (int)z);
 	}
 };
 

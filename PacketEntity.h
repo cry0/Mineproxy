@@ -25,7 +25,7 @@ public:
 
 	void Print(FILE *fp)
 	{
-		fprintf(fp, "Entity( entityID = %d )", entityID);
+		//fprintf(fp, "Entity( entityID = %d )", entityID);
 	}
 };
 

@@ -31,7 +31,7 @@ public:
 
 	void Print(FILE *fp)
 	{
-		fprintf(fp, "EntityLook ( entityID = %d, rotation = %d, pitch = %d )", entityID, (int)rotation, (int)pitch);
+		//fprintf(fp, "EntityLook ( entityID = %d, rotation = %d, pitch = %d )", entityID, (int)rotation, (int)pitch);
 	}
 };
 

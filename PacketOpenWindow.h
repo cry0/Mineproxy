@@ -17,6 +17,7 @@ class Packet_OpenWindow : public Packet
 		
 		~Packet_OpenWindow()
 		{
+			delete[] windowTitle;
 		}
 		
 		bool ReadPacket(SOCKET s)

@@ -3,6 +3,10 @@
 
 #include "Packet.h"
 #include "protocol.h"
+#include <string>
+
+extern bool g_autoMine;
+extern int g_mineSpeed;
 
 class Packet_Chat : public Packet
 {
@@ -30,6 +34,41 @@ public:
 	void Print(FILE *fp)
 	{
 		fprintf(fp, "Chat ( message = %s )", message);
+	}
+
+	void Process(bool to_server)
+	{
+		if(to_server)
+		{
+			std::string chat_message(message);
+			if(chat_message.find("am ") != std::string::npos)
+			{
+				if(chat_message.length() >= 4)
+				{
+					std::string choice = chat_message.substr(3, 1);
+					if(choice == "y")
+					{
+						g_autoMine = true;
+						printf("AutoMine enabled.\n");
+					}
+					else
+					{
+						g_autoMine = false;
+						printf("AutoMine disabled.\n");
+					}
+				}
+			}
+			else if (chat_message.find("ams ") != std::string::npos)
+			{
+				if(chat_message.length() >= 4)
+				{
+					std::string speedstr = chat_message.substr(3,chat_message.length()-3);
+					int speed = atoi(speedstr.c_str());
+					g_mineSpeed = speed;
+					printf("AutoMine Speed: %d\n", speed);
+				}
+			}
+		}
 	}
 };
 
