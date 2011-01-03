@@ -7,6 +7,7 @@
 
 extern bool g_autoMine;
 extern int g_mineSpeed;
+extern bool g_stopTime;
 
 class Packet_Chat : public Packet
 {
@@ -41,7 +42,7 @@ public:
 		if(to_server)
 		{
 			std::string chat_message(message);
-			if(chat_message.find("am ") != std::string::npos)
+			if(chat_message.find("am ") == 0)
 			{
 				if(chat_message.length() >= 4)
 				{
@@ -58,7 +59,7 @@ public:
 					}
 				}
 			}
-			else if (chat_message.find("ams ") != std::string::npos)
+			else if (chat_message.find("ams ") == 0)
 			{
 				if(chat_message.length() >= 4)
 				{
@@ -66,6 +67,23 @@ public:
 					int speed = atoi(speedstr.c_str());
 					g_mineSpeed = speed;
 					printf("AutoMine Speed: %d\n", speed);
+				}
+			}
+			else if(chat_message.find("st ") == 0)
+			{
+				if(chat_message.length() >= 4)
+				{
+					std::string choice = chat_message.substr(3, 1);
+					if(choice == "y")
+					{
+						g_autoMine = true;
+						printf("StopTime enabled.\n");
+					}
+					else
+					{
+						g_autoMine = false;
+						printf("StopTime disabled.\n");
+					}
 				}
 			}
 		}

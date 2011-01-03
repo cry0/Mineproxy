@@ -5,6 +5,9 @@
 #include "protocol.h"
 #include "level.h"
 
+extern unsigned long long g_timeValue;
+extern bool g_stopTime;
+
 class Packet_TimeUpdate : public Packet
 {
 private:
@@ -30,6 +33,10 @@ public:
 
 	void Process(bool to_server)
 	{
+		if(!g_stopTime)
+			g_timeValue = time;
+		else
+			time = g_timeValue;
 		if(!dumpingWorld)
 			return;
 

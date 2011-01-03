@@ -24,6 +24,9 @@ bool generatingLog = false;
 bool g_autoMine = true;
 int g_mineSpeed = 25;
 
+bool g_stopTime = false;
+unsigned long long g_timeValue = 0;
+
 #ifndef WIN32
 /**
 * C++ version 0.4 char* style "itoa":
