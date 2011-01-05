@@ -20,9 +20,8 @@ private:
 	int32_t compressedSize;
 	unsigned char *compressedData;
 	unsigned char *uncompressedData;
-	bool missingChunk;
 public:
-	Packet_MapChunk() : x(0),y(0),z(0),size_x(0),size_y(0),size_z(0),compressedSize(0),compressedData(NULL),missingChunk(false) {}
+	Packet_MapChunk() : x(0),y(0),z(0),size_x(0),size_y(0),size_z(0),compressedSize(0),compressedData(NULL) {}
 	~Packet_MapChunk()
 	{
 		delete[] compressedData;
@@ -83,26 +82,6 @@ public:
 		WriteByte(s,size_z);
 		WriteInt(s,compressedSize);
 		send(s,(char*)compressedData,compressedSize,0);
-		//This is a hack to appease MC when we get a map chunk before a PreChunk packet. Which DOES happen.
-		//It appears to cut down on the number of missing chunks somewhat. This is not a total fix. Server still fails to send some chunks.
-		if(missingChunk)
-		{
-			WriteByte(s, 0x32);
-			WriteInt(s,x);
-			WriteInt(s,z);
-			WriteByte(s,1);
-			missingChunk = false;
-			
-			WriteByte(s, 0x33);
-			WriteInt(s,x);
-			WriteShort(s,y);
-			WriteInt(s,z);
-			WriteByte(s,size_x);
-			WriteByte(s,size_y);
-			WriteByte(s,size_z);
-			WriteInt(s,compressedSize);
-			send(s,(char*)compressedData,compressedSize,0);
-		}
 	}
 
 	void Process(bool to_server)
@@ -119,7 +98,6 @@ public:
 		if(chunk == NULL)
 		{
 			printf("Unable to find chunk %d,%d in hashmap.\n",x,z);
-			missingChunk = true;
 			return;
 		}
 
@@ -140,11 +118,6 @@ public:
 	{
 		fprintf(fp, "MapChunk ( x = %d, y = %d, z = %d, size_x = %d, size_y = %d, size_z = %d, compressedSize = %d )",
 			x,(int)y,z,(int)size_x,(int)size_y,(int)size_z,(int)compressedSize);
-	}
-
-	bool isMissing()
-	{
-		return missingChunk;
 	}
 };
 
