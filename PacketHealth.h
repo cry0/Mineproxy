@@ -7,7 +7,7 @@
 class Packet_Health : public Packet
 {
 private:
-	char health;
+	short health;
 public:
 	Packet_Health() : health(0) {}
 	~Packet_Health()
