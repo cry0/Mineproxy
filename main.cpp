@@ -83,14 +83,24 @@ SOCKET Connect(const char *host, int port)
 	if(addr==INADDR_NONE)
 	{
 		hp=gethostbyname(host);
+		if(hp == NULL)
+		{
+			printf("Failed to resolve hostname!\n");
+			return 0;
+		}
 		addr = *((unsigned long*)hp->h_addr);
 	}
 	else
 	{
 
 		hp=gethostbyaddr((char*)&addr,sizeof(addr),AF_INET);
+		if(hp == NULL)
+		{
+			printf("Failed to resolve address!\n");
+			return 0;
+		}
 	}
-
+	
 	if(server == INVALID_SOCKET)
 	{
 		printf("Failed to create socket\n");
@@ -477,7 +487,7 @@ int main(int argc, char *argv[])
 					send(client,(char*)&keep_alive,1,0);
 					oldtime = curtimes;
 				}
-				//usleep(5000);
+				usleep(10);
 			}
 		}
 		catch (const char *err)
