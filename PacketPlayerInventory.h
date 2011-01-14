@@ -10,6 +10,7 @@ private:
 	int entityID;
 	short slot;
 	short itemID;
+	short damage;
 
 	struct Item
 	{
@@ -33,6 +34,7 @@ public:
 		entityID = ReadInt(s);
 		slot = ReadShort(s);
 		itemID = ReadShort(s);
+		damage = ReadShort(s);
 		return true;
 /*
 		if(count <= 0)
@@ -59,6 +61,7 @@ public:
 		WriteInt(s,entityID);
 		WriteShort(s,slot);
 		WriteShort(s,itemID);
+		WriteShort(s,damage);
 /*
 		for(int i=0;i<count;i++)
 		{
@@ -74,8 +77,8 @@ public:
 
 	void Print(FILE *fp)
 	{
-		fprintf(fp, "PlayerInventory( entityID = %d, slot = %d, itemID = %d )",
-			entityID, slot, (int)itemID);
+		fprintf(fp, "PlayerInventory( entityID = %d, slot = %d, itemID = %d, damage = %d )",
+			entityID, slot, (int)itemID, (int)damage);
 	}
 };
 

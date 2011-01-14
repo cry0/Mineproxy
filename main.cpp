@@ -9,6 +9,7 @@
 #include <sys/ioctl.h>
 //#include <unistd.h>
 #include <errno.h>
+#include <signal.h>
 // Call me lazy
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR -1
@@ -193,6 +194,11 @@ void usage()
 
 int main(int argc, char *argv[])
 {
+	//This seems to happen a lot with minecraft servers.
+	#ifndef WIN32
+	signal(SIGPIPE, SIG_IGN);
+	#endif
+	
 	printf("Minecraft Alpha Proxy by ReDucTor (James Mitchell)\n");
 	printf("Version: 1.6\n");
 	printf("Updated to Minecraft Beta by Zwagoth\n");
@@ -278,12 +284,13 @@ int main(int argc, char *argv[])
 	packetFactory[0x10] = CreatePacket_ItemSwitch;
 	packetFactory[0x11] = CreatePacket_AddToInventory;
 	packetFactory[0x12] = CreatePacket_ArmAnimation;
-
+	packetFactory[0x13] = CreatePacket_EntityAction;
 	packetFactory[0x14] = CreatePacket_NamedEntitySpawn;
 	packetFactory[0x15] = CreatePacket_PickupSpawn;
 	packetFactory[0x16] = CreatePacket_CollectItem;
 	packetFactory[0x17] = CreatePacket_AddObject;
 	packetFactory[0x18] = CreatePacket_MobSpawn;
+	packetFactory[0x19] = CreatePacket_Unknown1;
 
 	packetFactory[0x1C] = CreatePacket_Velocity;
 	packetFactory[0x1D] = CreatePacket_DestroyEntity;
@@ -294,11 +301,13 @@ int main(int argc, char *argv[])
 	packetFactory[0x22] = CreatePacket_EntityTeleport;
 	packetFactory[0x26] = CreatePacket_EntityStatus;
 
+	packetFactory[0x28] = CreatePacket_Metadata;
 	packetFactory[0x27] = CreatePacket_AttachEntity;
 	packetFactory[0x32] = CreatePacket_PreChunk;
 	packetFactory[0x33] = CreatePacket_MapChunk;
 	packetFactory[0x34] = CreatePacket_MultiBlockChange;
 	packetFactory[0x35] = CreatePacket_BlockChange;
+	packetFactory[0x36] = CreatePacket_Unknown2;
 	packetFactory[0x3B] = CreatePacket_ComplexEntity;
 	packetFactory[0x3C] = CreatePacket_Explosion;
 

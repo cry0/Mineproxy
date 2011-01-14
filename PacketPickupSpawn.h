@@ -10,6 +10,7 @@ private:
 	int entityID;
 	short itemType;
 	char count;
+	short damage;
 	int x;
 	int y;
 	int z;
@@ -24,6 +25,7 @@ public:
 		entityID = ReadInt(s);
 		itemType = ReadShort(s);
 		count = ReadByte(s);
+		damage = ReadShort(s);
 		x = ReadInt(s);
 		y = ReadInt(s);
 		z = ReadInt(s);
@@ -38,6 +40,7 @@ public:
 		WriteInt(s,entityID);
 		WriteShort(s,itemType);
 		WriteByte(s,count);
+		WriteShort(s,damage);
 		WriteInt(s,x);
 		WriteInt(s,y);
 		WriteInt(s,z);
@@ -48,8 +51,8 @@ public:
 
 	void Print(FILE *fp)
 	{
-		fprintf(fp, "PickSpawn( entityID = %d, itemType = %d, count = %d, x = %d, y = %d, z = %d, rotation = %d, pitch = %d, roll = %d )",
-			entityID, (int)itemType, (int)count, x,y,z, (int)rotation, (int)pitch, (int)roll);
+		fprintf(fp, "PickSpawn( entityID = %d, itemType = %d, count = %d, damage = %d, x = %d, y = %d, z = %d, rotation = %d, pitch = %d, roll = %d )",
+			entityID, (int)itemType, (int)count, (int)damage, x,y,z, (int)rotation, (int)pitch, (int)roll);
 	}
 };
 

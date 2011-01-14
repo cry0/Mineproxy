@@ -43,6 +43,7 @@ public:
 #include "PacketItemSwitch.h"
 #include "PacketAddToInventory.h"
 #include "PacketArmAnimation.h"
+#include "PacketEntityAction.h"
 
 #include "PacketNamedEntitySpawn.h"
 #include "PacketPickupSpawn.h"
@@ -61,11 +62,14 @@ public:
 #include "PacketEntityStatus.h"
 
 #include "PacketAttachEntity.h"
+#include "PacketMetadata.h"
+#include "PacketUnknown1.h"
 
 #include "PacketPreChunk.h"
 #include "PacketMapChunk.h"
 #include "PacketMultiBlockChange.h"
 #include "PacketBlockChange.h"
+#include "PacketUnknown2.h"
 #include "PacketComplexEntity.h"
 #include "PacketExplosion.h"
 

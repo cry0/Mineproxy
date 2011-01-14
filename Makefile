@@ -8,3 +8,5 @@ LIBS=-lz
 $(PROG): $(OBJS)
 	g++ -Wall -ggdb -O2 $(LIBS) -o $@ $(OBJS)
 
+clean:
+	rm *.o

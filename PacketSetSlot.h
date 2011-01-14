@@ -11,7 +11,7 @@ class Packet_SetSlot : public Packet
 		short slot;
 		short itemID;
 		char itemCount;
-		char itemUses;
+		short itemUses;
 		
 	public:
 		Packet_SetSlot() : windowID(0), slot(0), itemID(0), itemCount(0), itemUses(0) {}
@@ -29,7 +29,7 @@ class Packet_SetSlot : public Packet
 			if(itemID == -1)
 				return true;
 			itemCount = ReadByte(s);
-			itemUses = ReadByte(s);
+			itemUses = ReadShort(s);
 			return true;
 		}
 		
@@ -41,7 +41,7 @@ class Packet_SetSlot : public Packet
 			if(itemID == -1)
 				return;
 			WriteByte(s,itemCount);
-			WriteByte(s,itemUses);
+			WriteShort(s,itemUses);
 		}
 		
 		void Print(FILE *fp)
