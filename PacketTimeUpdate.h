@@ -34,12 +34,17 @@ public:
 	void Process(bool to_server)
 	{
 		if(!g_stopTime)
+		{
 			g_timeValue = time;
+		}
 		else
+		{
+			printf("Using StopTime!\n");
 			time = g_timeValue;
+		}
+		
 		if(!dumpingWorld)
 			return;
-
 		g_level.time = time;
 	}
 };

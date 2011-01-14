@@ -13,7 +13,7 @@ class Packet_WindowItems : public Packet
 		struct Item
 		{
 			short itemid;
-			short count;
+			char count;
 			short health;
 		};
 		
@@ -40,7 +40,7 @@ class Packet_WindowItems : public Packet
 				
 				if(items[i].itemid != -1)
 				{
-					items[i].count = ReadShort(s);
+					items[i].count = ReadByte(s);
 					items[i].health = ReadShort(s);
 				}
 			}
@@ -56,7 +56,7 @@ class Packet_WindowItems : public Packet
 				WriteShort(s,items[i].itemid);
 				if(items[i].itemid != -1)
 				{
-					WriteShort(s,items[i].count);
+					WriteByte(s,items[i].count);
 					WriteShort(s,items[i].health);
 				}
 			}

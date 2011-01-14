@@ -69,7 +69,7 @@ public:
 #include "PacketMapChunk.h"
 #include "PacketMultiBlockChange.h"
 #include "PacketBlockChange.h"
-#include "PacketUnknown2.h"
+#include "PacketSoundBlock.h"
 #include "PacketComplexEntity.h"
 #include "PacketExplosion.h"
 

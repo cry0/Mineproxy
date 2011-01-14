@@ -307,7 +307,7 @@ int main(int argc, char *argv[])
 	packetFactory[0x33] = CreatePacket_MapChunk;
 	packetFactory[0x34] = CreatePacket_MultiBlockChange;
 	packetFactory[0x35] = CreatePacket_BlockChange;
-	packetFactory[0x36] = CreatePacket_Unknown2;
+	packetFactory[0x36] = CreatePacket_SoundBlock;
 	packetFactory[0x3B] = CreatePacket_ComplexEntity;
 	packetFactory[0x3C] = CreatePacket_Explosion;
 
