@@ -14,7 +14,7 @@ class Packet_WindowItems : public Packet
 		{
 			short itemid;
 			short count;
-			char health;
+			short health;
 		};
 		
 		Item *items;
