@@ -41,7 +41,7 @@ class Packet_WindowItems : public Packet
 				if(items[i].itemid != -1)
 				{
 					items[i].count = ReadShort(s);
-					items[i].health = ReadByte(s);
+					items[i].health = ReadShort(s);
 				}
 			}
 			return true;
@@ -57,7 +57,7 @@ class Packet_WindowItems : public Packet
 				if(items[i].itemid != -1)
 				{
 					WriteShort(s,items[i].count);
-					WriteByte(s,items[i].health);
+					WriteShort(s,items[i].health);
 				}
 			}
 		}
