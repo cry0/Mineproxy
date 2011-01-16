@@ -76,14 +76,24 @@ public:
 					std::string choice = chat_message.substr(3, 1);
 					if(choice == "y")
 					{
-						g_autoMine = true;
+						g_stopTime = true;
 						printf("StopTime enabled.\n");
 					}
 					else
 					{
-						g_autoMine = false;
+						g_stopTime = false;
 						printf("StopTime disabled.\n");
 					}
+				}
+			}
+			else if (chat_message.find("sts ") == 0)
+			{
+				if(chat_message.length() >= 4)
+				{
+					std::string timestr = chat_message.substr(3,chat_message.length()-3);
+					uint64_t time = (uint64_t)atoll(timestr.c_str());
+					g_timeValue = time;
+					printf("TimeValue: %llu\n", (long long unsigned int)time);
 				}
 			}
 		}

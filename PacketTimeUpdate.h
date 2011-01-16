@@ -33,13 +33,12 @@ public:
 
 	void Process(bool to_server)
 	{
-		if(!g_stopTime)
+		if(g_stopTime == false)
 		{
 			g_timeValue = time;
 		}
 		else
 		{
-			printf("Using StopTime!\n");
 			time = g_timeValue;
 		}
 		
