@@ -290,7 +290,7 @@ int main(int argc, char *argv[])
 	packetFactory[0x16] = CreatePacket_CollectItem;
 	packetFactory[0x17] = CreatePacket_AddObject;
 	packetFactory[0x18] = CreatePacket_MobSpawn;
-	packetFactory[0x19] = CreatePacket_Unknown1;
+	packetFactory[0x19] = CreatePacket_EntityPainting;
 
 	packetFactory[0x1C] = CreatePacket_Velocity;
 	packetFactory[0x1D] = CreatePacket_DestroyEntity;

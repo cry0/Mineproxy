@@ -63,7 +63,7 @@ public:
 
 #include "PacketAttachEntity.h"
 #include "PacketMetadata.h"
-#include "PacketUnknown1.h"
+#include "PacketEntityPainting.h"
 
 #include "PacketPreChunk.h"
 #include "PacketMapChunk.h"
