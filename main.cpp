@@ -27,6 +27,10 @@ int g_mineSpeed = 25;
 
 bool g_stopTime = false;
 unsigned long long g_timeValue = 0;
+int g_clientPort = 1337;
+
+char g_forceUsername[128] = "";
+bool g_useUsername = false;
 
 #ifndef WIN32
 /**
@@ -188,7 +192,8 @@ void usage()
 		"\t-h<host>\tThe hostname of the server to connect to (default localhost)\n"
 		"\t-p<port>\tThe port the minecraft server is using (default 25565)\n"
 		"\t-l<filename>\tThe filename to log traffic into (- for stdout)\n"
-		"\t-d<folder>\tThe folder to dump the world into (no spaces) (experimental)\n");
+		"\t-d<folder>\tThe folder to dump the world into (no spaces) (experimental)\n"
+		"\t-u<username>\tForce the username you attempt to log in with. For times when minecraft.net is down. ;-)\n");
 }
 
 
@@ -203,7 +208,6 @@ int main(int argc, char *argv[])
 	printf("Version: 1.6\n");
 	printf("Updated to Minecraft Beta by Zwagoth\n");
 
-	int clientport = 1337;
 	char hostname[128] = "localhost";
 	char logfilename[128] = "";
 	int serverport = 25565;
@@ -213,7 +217,7 @@ int main(int argc, char *argv[])
 		switch (argv[1][1])
 		{
 		case 'c': // client port
-			clientport = atoi(&argv[1][2]);
+			g_clientPort = atoi(&argv[1][2]);
 			break;
 
 		case 'h': // host
@@ -232,6 +236,11 @@ int main(int argc, char *argv[])
 		case 'd': // dump world
 			strcpy(worldfolder,&argv[1][2]);
 			dumpingWorld = true;
+			break;
+
+		case 'u': //force username
+			strcpy(g_forceUsername, &argv[1][2]);
+			g_useUsername = true;
 			break;
 
 		default:
@@ -340,7 +349,7 @@ int main(int argc, char *argv[])
 #endif
 	while(1)
 	{
-		SOCKET client = WaitForClient(clientport);
+ 		SOCKET client = WaitForClient(g_clientPort);
 		if(client == 0)
 			continue;
 		SetNonBlocking(client);

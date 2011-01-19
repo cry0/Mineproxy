@@ -5,6 +5,8 @@
 #include "protocol.h"
 #include "level.h"
 
+extern char g_forceUsername[128];
+extern bool g_useUsername;
 
 class Packet_Login : public Packet
 {
@@ -47,6 +49,15 @@ public:
 
 	void Process(bool to_server)
 	{
+		if(to_server == true && g_useUsername == true)
+		{
+			delete[] name;
+			int username_len = strlen(g_forceUsername);
+			name = new char[username_len+1];
+			memset(name, 0, username_len+1);
+			strncpy(name, &g_forceUsername[0], username_len);
+		}
+		
 		if(!dumpingWorld)
 			return;
 
