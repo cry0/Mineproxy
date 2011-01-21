@@ -136,7 +136,11 @@ SOCKET WaitForClient(int port)
 	}
 
 	const uint32_t reuse_addr = 1;
+#ifdef WIN32
+	setsockopt(ourserver, SOL_SOCKET, SO_REUSEADDR, (char*)&reuse_addr, sizeof(reuse_addr));
+#else
 	setsockopt(ourserver, SOL_SOCKET, SO_REUSEADDR, &reuse_addr, sizeof(reuse_addr));
+#endif
 
 	sockaddr_in local;
 	local.sin_family = AF_INET;
@@ -458,8 +462,9 @@ int main(int argc, char *argv[])
 					{
 						printf("%2.5f 0x%02X S->C: ",double(curtime-starttime)/CLOCKS_PER_SEC, packetType);
 						printf("Invalid Packet Type\n");
-						running = false;
-						break;
+						//running = false;
+						//break;
+						continue;
 					}
 					Packet *packet = packetFactory[packetType]();
 					if(generatingLog && packetType != 0x20 && packetType != 0x1F && packetType != 0x1E && packetType != 0x21)
@@ -487,7 +492,11 @@ int main(int argc, char *argv[])
 					send(client,(char*)&keep_alive,1,0);
 					oldtime = curtimes;
 				}
+#ifdef WIN32
+				Sleep(10);
+#else
 				usleep(10);
+#endif
 			}
 		}
 		catch (const char *err)
